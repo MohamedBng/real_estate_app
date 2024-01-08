@@ -1,0 +1,12 @@
+{
+  id: property.id,
+  title: property.title,
+  description: property.description,
+  price: property.price,
+  address: property.address,
+  bedrooms: property.bedrooms,
+  bathrooms: property.bathrooms,
+  area: property.area,
+  property_type: property.property_type,
+  status: property.status,
+}

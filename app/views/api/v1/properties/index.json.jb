@@ -1,0 +1,5 @@
+{
+  properties: render(partial: "api/v1/properties/property", collection: @properties, as: :property),
+  cities: @cities,
+  property_type_enum: @property_type_enum,
+}
