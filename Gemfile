@@ -64,3 +64,4 @@ gem 'mini_magick'
 gem 'fastimage'
 gem 'acts_as_list'
 gem "jb"
+gem 'rswag'

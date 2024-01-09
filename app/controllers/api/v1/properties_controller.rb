@@ -1,26 +1,8 @@
-class Api::V1::PropertiesController < ApplicationController
+class Api::V1::PropertiesController < Api::V1::BaseController
   def index
     @properties = Property.all
 
-    if params[:city].present?
-      @properties = @properties.where("address ->> 'city' = ?", params[:city])
-    end
-
-    if params[:property_type].present?
-      @properties = @properties.where(property_type: params[:property_type])
-    end
-
-    if params[:status].present?
-      @properties = @properties.where(status: params[:status])
-    end
-
-    if params[:bedrooms].present?
-      @properties = @properties.where(bedrooms: params[:bedrooms])
-    end
-
-    if params[:bathrooms].present?
-      @properties = @properties.where(bathrooms: params[:bathrooms])
-    end
+    apply_filters
 
     @status_enum = Property.statuses.keys
     @property_type_enum = Property.property_types.keys
@@ -29,5 +11,17 @@ class Api::V1::PropertiesController < ApplicationController
 
   def show
     @property = Property.find(params[:id])
+  end
+
+  private
+
+  def apply_filters
+    filter_params.each do |key, value|
+      @properties = @properties.where(key => value) if value.present?
+    end
+  end
+
+  def filter_params
+    params.permit(:city, :property_type, :status, :bedrooms, :bathrooms)
   end
 end
