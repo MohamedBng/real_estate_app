@@ -9,4 +9,43 @@ class Property < ApplicationRecord
   validates :title, :description, :price, :address, :bedrooms, :bathrooms, :area, :property_type, :status, presence: true
 
   scope :ordered_by_most_recent, -> { order(created_at: :desc) }
+
+  def self.ransackable_associations(auth_object = nil)
+    super + ['property_photos']
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    # Liste des attributs autorisés
+    ['city', 'property_type', 'status', 'title']
+  end
+
+  def title_fr=(value)
+    self.title ||= {}
+    self.title['fr'] = value
+  end
+
+  def title_en=(value)
+    self.title ||= {}
+    self.title['en'] = value
+  end
+
+  def description_fr=(value)
+    self.description ||= {}
+    self.description['fr'] = value
+  end
+
+  def description_en=(value)
+    self.description ||= {}
+    self.description['en'] = value
+  end
+
+  def street=(value)
+    self.address ||= {}
+    self.address['street'] = value
+  end
+
+  def city=(value)
+    self.address ||= {}
+    self.address['city'] = value
+  end
 end

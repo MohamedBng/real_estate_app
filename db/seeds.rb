@@ -9,3 +9,4 @@ end
 5.times do
     FactoryBot.create(:property, :for_rent)
 end
+AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
