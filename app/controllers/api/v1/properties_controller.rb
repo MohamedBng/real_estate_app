@@ -4,9 +4,9 @@ class Api::V1::PropertiesController < Api::V1::BaseController
 
     apply_filters
 
-    @status_enum = Property.statuses.keys
-    @property_type_enum = Property.property_types.keys
-    @cities = Property.cities.keys
+    # @status_enum = Property.statuses.keys
+    # @property_type_enum = Property.property_types.keys
+    # @cities = Property.cities.keys
   end
 
   def show

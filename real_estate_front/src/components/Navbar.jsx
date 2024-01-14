@@ -196,7 +196,7 @@ const Navbar = () => {
   return (
     <NavbarContainer>
       <LogoLink href="/">
-        <Logo src="images/home-logo.svg" alt="Logo" />
+        <Logo src="images/estelle-darcy-logo.svg" alt="Logo" />
       </LogoLink>
       <BurgerMenuIcon onClick={toggleMenu}>
         <svg width="30" height="30" viewBox="0 0 100 100">

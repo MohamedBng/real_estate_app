@@ -1,9 +1,15 @@
 {
+  "hero":{
+    "main_text": "Rêver, Investir, Réussir Avec La Meilleure Agence Immobilière À Dubaï Devoyl Capital",
+    "subtitle": "Nous Offrons Les Meilleurs Services Immobiliers",
+    "search_button": "Rechercher",
+    "localisation_icon_alt": "Localisation"
+  },
   "navbar": {
-    "home": "ACCUEIL",
-    "properties": "TOUT LES BIENS",
-    "guides": "GUIDES",
-    "faq": "FAQ",
-    "contact": "NOUS CONTACTEZ"
+    "home": "Acceuil",
+    "properties": "Tout les biens",
+    "guides": "Guides",
+    "faq": "Faq",
+    "contact": "Nous contactez"
   }
 }
