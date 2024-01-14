@@ -8,6 +8,8 @@ class Property < ApplicationRecord
 
   validates :title, :description, :price, :address, :bedrooms, :bathrooms, :area, :property_type, :status, presence: true
 
+  validate :address_must_contain_street_and_city
+
   scope :ordered_by_most_recent, -> { order(created_at: :desc) }
 
   def self.ransackable_associations(auth_object = nil)
@@ -47,5 +49,16 @@ class Property < ApplicationRecord
   def city=(value)
     self.address ||= {}
     self.address['city'] = value
+  end
+
+  private
+
+  def address_must_contain_street_and_city
+    if address.present?
+      errors.add(:address, 'doit inclure la rue') unless address['street'].present?
+      errors.add(:address, 'doit inclure la ville') unless address['city'].present?
+    else
+      errors.add(:address, 'doit être présent')
+    end
   end
 end

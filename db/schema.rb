@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_13_091111) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_14_122650) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,10 +57,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_13_091111) do
   create_table "property_photos", force: :cascade do |t|
     t.bigint "property_id", null: false
     t.text "file_data"
-    t.integer "position"
+    t.integer "position", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["property_id", "position"], name: "index_property_photos_on_property_id_and_position", unique: true
     t.index ["property_id"], name: "index_property_photos_on_property_id"
   end
 

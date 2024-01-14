@@ -1,6 +1,8 @@
 ActiveAdmin.register Property do
   actions :all
 
+  config.per_page = [10, 50, 100]
+
   filter :title
   filter :status, as: :select, collection: Property.statuses.keys
   filter :property_type, as: :select, collection: Property.property_types.keys
@@ -12,27 +14,17 @@ ActiveAdmin.register Property do
     column (I18n.locale == :fr ? :title_fr : :title_en) do |property|
       property.title[I18n.locale.to_s]
     end
-    column (I18n.locale == :fr ? :description_fr : :description_en) do |property|
-      property.description[I18n.locale.to_s]
-    end
     column :street do |property|
       property.address['street']
     end
     column :city do |property|
-      property.address['city']
+      property.address['city'].humanize
     end
-    column :status
-    column :property_type
-    column :price
-    column :bedrooms
-    column :bathrooms
-    column :area
-    column :created_at
-
-    column "Photos" do |property|
-      property.property_photos.map do |photo|
-        image_tag(photo.file.url, height: '50') if photo.file.present?
-      end.join(' ').html_safe
+    column :status do |property|
+      property.status.humanize
+    end
+    column :property_type do |property|
+      property.property_type.humanize
     end
     actions
   end
@@ -68,9 +60,9 @@ ActiveAdmin.register Property do
     end
 
     panel "Photos" do
-      table_for property.property_photos do
+      table_for property.property_photos.ordered do
         column :file do |photo|
-          image_tag(photo.file.url, height: '50') if photo.file.present?
+          image_tag(photo.file.url(:small)) if photo.file.present?
         end
         column :position
       end
@@ -78,13 +70,14 @@ ActiveAdmin.register Property do
   end
 
   form do |f|
+    f.semantic_errors *f.object.errors.attribute_names
     f.inputs do
       f.input :title_fr, label: 'Titre (Français)', as: :text, input_html: { name: "property[title_fr]", value: f.object.title&.[]('fr') }
       f.input :title_en, label: 'Titre (Anglais)', as: :text, input_html: { name: "property[title_en]", value: f.object.title&.[]('en') }
       f.input :description_fr, label: 'Description (Français)', as: :text , input_html: { value: f.object.description&.[]('fr') }
       f.input :description_en, label: 'Description (Anglais)', as: :text , input_html: { value: f.object.description&.[]('en') }
       f.input :street, label: 'Rue', input_html: { value: f.object.address&.[]('street') }
-      f.input :city, as: :select, collection: Property.cities.keys
+      f.input :city, as: :select, collection: Property.cities.keys, selected: f.object.address&.[]('city')
       f.input :price
       f.input :bedrooms
       f.input :bathrooms
@@ -93,9 +86,9 @@ ActiveAdmin.register Property do
       f.input :status, as: :select, collection: Property.statuses.keys
     end
 
-    f.inputs do
-      f.has_many :property_photos, allow_destroy: true, heading: 'Photos' do |photo|
-        photo.input :file, as: :file, hint: photo.object.file.present? ? image_tag(photo.object.file.url) : content_tag(:span, 'Aucune photo pour le moment')
+    f.inputs 'Photos' do
+      f.has_many :property_photos, allow_destroy: true, new_record: true, heading: 'Photos', sortable: :position, sortable_start: 1 do |photo|
+        photo.input :file, as: :file, hint: photo.object.file.present? ? image_tag(photo.object.file_url(:small)) : content_tag(:span, 'Aucune photo pour le moment')
         photo.input :position, as: :hidden
       end
     end

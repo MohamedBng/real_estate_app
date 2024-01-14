@@ -85,6 +85,7 @@ gem "jb"
 gem 'rswag'
 gem 'activeadmin'
 gem 'devise'
-gem 'cancancan'
 gem 'draper'
 gem 'pundit'
+gem 'activeadmin_blaze_theme', '~> 1.1'
+gem 'sassc'
