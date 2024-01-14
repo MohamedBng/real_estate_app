@@ -62,9 +62,8 @@ ActiveAdmin.register Property do
     panel "Photos" do
       table_for property.property_photos.ordered do
         column :file do |photo|
-          image_tag(photo.file.url(:small)) if photo.file.present?
+          image_tag(photo.file_url(:small)) if photo.file.present?
         end
-        column :position
       end
     end
   end
