@@ -113,7 +113,6 @@ const FeatureSection = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Propriétés en vente:', data);
-        // Assurez-vous de récupérer seulement les 3 premières propriétés
         const troisPremieresVentes = data.properties.slice(0, 3);
         setVentes(troisPremieresVentes);
       })
@@ -125,7 +124,6 @@ const FeatureSection = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Propriétés en location:', data);
-        // Assurez-vous de récupérer seulement les 3 premières propriétés
         const troisPremieresLocations = data.properties.slice(0, 3);
         setLocations(troisPremieresLocations);
       })
