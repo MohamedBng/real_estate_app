@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import '../i18n.js';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 const FeatureCardContainer = styled.div`
     width: min-content;
@@ -112,7 +113,7 @@ const Area = styled.p`
 `;
 
 
-const StyledLink = styled.a`
+const StyledLink = styled(Link)`
 `;
 
 const FeatureCard = ({ id, price, name, address, image, bedrooms, bathrooms, area}) => {
@@ -128,7 +129,7 @@ const FeatureCard = ({ id, price, name, address, image, bedrooms, bathrooms, are
         <CardBody>
             <CardHeader>
                 <Price>{formatPrice(price)}</Price>
-                <StyledLink href={`/properties/${id}`}>
+                <StyledLink to={`/properties/${id}`}>
                     <Icon src="/images/arrow-icon.svg" alt="Détails" />
                 </StyledLink>
             </CardHeader>

@@ -1,16 +1,16 @@
-import './App.css';
-import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero'
-import FeatureSection from './components/FeatureSection';
+import './App.css';
 
 function App() {
   return (
-    <div className="App">
+    <BrowserRouter>
       <Navbar />
-      <Hero />
-      <FeatureSection />
-    </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

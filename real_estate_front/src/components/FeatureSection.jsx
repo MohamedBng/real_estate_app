@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import '../i18n.js';
 import { useTranslation } from 'react-i18next';
 import FeatureCard from './FeatureCard';
+import { Link } from 'react-router-dom';
 
 const FeatureSectionContainer = styled.div`
     width: 90%;
@@ -60,12 +61,14 @@ const LinkContainer = styled.div`
     }
 `;
 
-const StyledLink = styled.a`
-    margin-right: 0.5rem;
-    text-decoration: none;
-    font-weight: bold;
-    color: #3E8BE4;
+const StyledLink = styled(Link)`
+  margin-right: 0.5rem;
+  text-decoration: none;
+  font-weight: bold;
+  color: #3E8BE4;
 `;
+
+
 
 const Icon = styled.img`
     width: 24px;
@@ -153,8 +156,8 @@ const FeatureSection = () => {
                     </CheckboxLabel>
                 </CheckboxContainer>
                 <LinkContainer>
-                    <StyledLink href="/properties">{t('feature_section.see_more')}</StyledLink>
-                    <Icon src="/images/arrow-icon-simple.svg" alt="Icon" />
+                  <StyledLink to="/properties">{t('feature_section.see_more')}</StyledLink>
+                  <Icon src="/images/arrow-icon-simple.svg" alt="Icon" />
                 </LinkContainer>
             </CheckboxAndLink>
             <SectionContainer>

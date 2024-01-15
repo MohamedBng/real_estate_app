@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../i18n.js';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const NavbarContainer = styled.div`
@@ -83,7 +84,7 @@ const NavLinks = styled.div`
   }
 `;
 
-const NavLink = styled.a`
+const StyledLink = styled(Link)`
   margin-right: 1.5rem; // 15px
   color: black;
   text-decoration: none;
@@ -195,9 +196,9 @@ const Navbar = () => {
 
   return (
     <NavbarContainer>
-      <LogoLink href="/">
+      <StyledLink to="/">
         <Logo src="images/estelle-darcy-logo.svg" alt="Logo" />
-      </LogoLink>
+      </StyledLink>
       <BurgerMenuIcon onClick={toggleMenu}>
         <svg width="30" height="30" viewBox="0 0 100 100">
           <path d="M10,30h80v10H10z"/>
@@ -216,11 +217,11 @@ const Navbar = () => {
           </LanguageSelect>
         </ChangeLocales>
         <NavLinks>
-          <NavLink href="/">{t('navbar.home')}</NavLink>
-          <NavLink href="/properties">{t('navbar.properties')}</NavLink>
-          <NavLink href="#">{t('navbar.guides')}</NavLink>
-          <NavLink href="#">{t('navbar.faq')}</NavLink>
-          <NavLink href="#">{t('navbar.contact')}</NavLink>
+          <StyledLink to="/">{t('navbar.home')}</StyledLink>
+          <StyledLink to="/properties">{t('navbar.properties')}</StyledLink>
+          <StyledLink to="#">{t('navbar.guides')}</StyledLink>
+          <StyledLink to="#">{t('navbar.faq')}</StyledLink>
+          <StyledLink to="#">{t('navbar.contact')}</StyledLink>
         </NavLinks>
       </MobileNavRightItems>
     </NavbarContainer>

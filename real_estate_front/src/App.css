@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+#footer-root {
+  background-image: url('../public/images/home-interior.jpg');
+  background-size: cover;
+  background-position: center;
+}

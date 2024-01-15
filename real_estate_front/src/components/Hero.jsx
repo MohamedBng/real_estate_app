@@ -89,6 +89,7 @@ const SearchInput = styled.select`
   background-color: white;
   font-style: italic;
   border-radius: 10px;
+  -webkit-appearance: none;
 `;
 
 const SearchButton = styled.button`
