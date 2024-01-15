@@ -3,10 +3,16 @@
   title: property.title,
   description: property.description,
   price: property.price,
-  address: property.address,
+  city: property.address["city"],
+  street: property.address["street"],
   bedrooms: property.bedrooms,
   bathrooms: property.bathrooms,
   area: property.area,
   property_type: property.property_type,
   status: property.status,
+  photos: property.property_photos.map do |photo|
+    {
+      url: photo.file_url,
+    }
+  end
 }

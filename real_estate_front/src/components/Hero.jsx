@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 const HeroContainer = styled.div`
   position: relative;
-  background-image: url("/images/dubai-marina.jpg");
+  background-image: url("/images/dubaimarina.jpg");
   color: black;
   text-align: left;
   padding-left: 4.5rem;
@@ -43,6 +43,7 @@ const MainText = styled.p`
   font-size: 2rem;
   font-weight: bold;
   width: 29rem;
+  color: white;
 
   @media (max-width: 767px) {
     width: 100%;
@@ -141,16 +142,12 @@ const Hero = () => {
   const { t } = useTranslation();
   const [cities, setCities] = useState([]);
 
-  console.log('API Base URL:', process.env.REACT_APP_API_BASE_URL);
-
   useEffect(() => {
     fetch(`${apiUrl}/api/v1/cities`)
       .then(response => {
-        console.log(response);
         return response.json();
       })
       .then(data => {
-        console.log('Data reçue:', data); // Affiche les données dans la console
         setCities(data.cities);
       })
       .catch(error => console.error('Erreur lors de la récupération des villes:', error));
