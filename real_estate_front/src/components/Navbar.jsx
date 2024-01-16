@@ -23,17 +23,6 @@ const NavbarContainer = styled.div`
   }
 `;
 
-const LogoLink = styled.a`
-  text-decoration: none;
-
-  @media (max-width: 767px) {
-    height: 4rem;
-    overflow: hidden;
-    width: 8.7rem;
-    margin: 0 auto;
-  }
-`;
-
 const Logo = styled.img`
   width: 10rem;
   height: auto;
@@ -91,7 +80,9 @@ const StyledLink = styled(Link)`
   font-size: medium;
 
   @media (max-width: 767px) {
+    margin-top: 2rem;
     margin-right: 0rem;
+    text-align: center;
   }
 `;
 
@@ -135,12 +126,13 @@ const MobileNavRightItems = styled(NavRightItems)`
   @media (max-width: 767px) {
     overflow: hidden;
     transition: max-height 0.3s ease-in-out;
-    max-height: ${props => props.isOpen ? '500px' : '0'};
     flex-direction: column-reverse;
     align-items: center;
     padding-bottom: 1rem;
+    max-height: ${({ isOpen }) => isOpen ? '500px' : '0'};
   }
 `;
+
 
 
 const Navbar = () => {
@@ -171,7 +163,7 @@ const Navbar = () => {
   return (
     <NavbarContainer>
       <StyledLink to="/">
-        <Logo src="images/estelle-darcy-logo.svg" alt="Logo" />
+        <Logo src="images/home-logo.svg" alt="Logo" />
       </StyledLink>
       <BurgerMenuIcon onClick={toggleMenu}>
         <svg width="30" height="30" viewBox="0 0 100 100">

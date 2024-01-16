@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
 
 const FooterContainer = styled.footer`
     display: flex;
@@ -118,34 +119,24 @@ const SubmitButton = styled.button`
 `;
 
 const FooterContact = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.target);
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
+  const onSubmit = data => {
     fetch('/send_contact', {
       method: 'POST',
-      body: JSON.stringify({
-        name: data.get('name'),
-        email: data.get('email'),
-        message: data.get('message'),
-      }),
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify(data),
     })
     .then(response => response.json())
     .then(data => {
       console.log('Success:', data);
+      reset();
     })
     .catch((error) => {
       console.error('Error:', error);
     });
-    setName('');
-    setEmail('');
-    setMessage('');
   };
 
   return (
@@ -154,10 +145,16 @@ const FooterContact = () => {
         <Title>Laissez-nous vous aider à trouver les meilleures propriétés résidentielles à Dubaï.</Title>
         <Paragraph>Vous recherchez une propriété à Dubaï qui prendra de la valeur avec le temps tout en vous offrant exclusivité et confort ? Vous êtes au bon endroit avec notre portefeuille, qui inclut uniquement les meilleures propriétés résidentielles des Émirats Arabes Unis.</Paragraph>
       </ContactInfo>
-      <Form onSubmit={handleSubmit}>
-        <Input name="name" type="text" placeholder="Nom" value={name} onChange={(e) => setName(e.target.value)} required />
-        <Input name="email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <Textarea name="message" placeholder="Message" value={message} onChange={(e) => setMessage(e.target.value)} required />
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Input name="name" type="text" placeholder="Nom" {...register('name', { required: true })} />
+        {errors.name && <span>Le nom est requis.</span>}
+
+        <Input name="email" type="email" placeholder="Email" {...register('email', { required: true })} />
+        {errors.email && <span>L'email est requis.</span>}
+
+        <Textarea name="message" placeholder="Message" {...register('message', { required: true })} />
+        {errors.message && <span>Un message est requis.</span>}
+
         <SubmitButton type="submit">Envoyer</SubmitButton>
       </Form>
     </FooterContainer>
