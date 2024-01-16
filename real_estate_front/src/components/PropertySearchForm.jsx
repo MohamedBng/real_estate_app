@@ -78,14 +78,14 @@ const PropertySearchForm = () => {
 
   useEffect(() => {
     const query = new URLSearchParams(search);
-    const city = query.get('city');
-    const propertyType = query.get('property_type');
-    const status = query.get('status');
-    const bathrooms = query.get('bathrooms');
-    const bedrooms = query.get('bedrooms');
+    const city = query.get('city') || "";
+    const propertyType = query.get('property_type') || "";
+    const status = query.get('status') || "";
+    const bathrooms = query.get('bathrooms') || "";
+    const bedrooms = query.get('bedrooms') || "";
 
     const apiUrlWithParams = `${apiUrl}/api/v1/properties?city=${city}&property_type=${propertyType}&status=${status}&bathrooms=${bathrooms}&bedrooms=${bedrooms}`;
-
+    console.log('apiUrlWithParams', apiUrlWithParams);
     fetch(apiUrlWithParams)
       .then(response => response.json())
       .then(data => {
