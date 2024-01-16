@@ -79,7 +79,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   font-size: medium;
 
-  @medi (max-width: 767px) {
+  @media (max-width: 767px) {
     margin-top: 2rem;
     margin-right: 0rem;
     text-align: center;
