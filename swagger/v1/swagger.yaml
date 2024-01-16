@@ -1,0 +1,42 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/cities":
+    get:
+      summary: Get the list of cities
+      tags:
+      - Cities
+      responses:
+        '200':
+          description: success
+  "/api/v1/properties":
+    get:
+      summary: Get the list of properties
+      tags:
+      - Properties
+      responses:
+        '200':
+          description: success
+  "/api/v1/properties/{id}":
+    get:
+      summary: Show a property
+      tags:
+      - Properties
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: success
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000

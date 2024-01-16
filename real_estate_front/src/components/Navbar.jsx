@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../i18n.js';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const NavbarContainer = styled.div`
@@ -19,17 +20,6 @@ const NavbarContainer = styled.div`
     flex-direction: column;
     height: auto;
     align-items: unset;
-  }
-`;
-
-const LogoLink = styled.a`
-  text-decoration: none;
-
-  @media (max-width: 767px) {
-    height: 4rem;
-    overflow: hidden;
-    width: 8.7rem;
-    margin: 0 auto;
   }
 `;
 
@@ -83,14 +73,16 @@ const NavLinks = styled.div`
   }
 `;
 
-const NavLink = styled.a`
+const StyledLink = styled(Link)`
   margin-right: 1.5rem; // 15px
   color: black;
   text-decoration: none;
   font-size: medium;
 
   @media (max-width: 767px) {
+    margin-top: 2rem;
     margin-right: 0rem;
+    text-align: center;
   }
 `;
 
@@ -134,31 +126,19 @@ const MobileNavRightItems = styled(NavRightItems)`
   @media (max-width: 767px) {
     overflow: hidden;
     transition: max-height 0.3s ease-in-out;
-    max-height: ${props => props.isOpen ? '500px' : '0'};
     flex-direction: column-reverse;
     align-items: center;
     padding-bottom: 1rem;
+    max-height: ${({ isOpen }) => isOpen ? '500px' : '0'};
   }
 `;
 
 
+
 const Navbar = () => {
-  const [language, setLanguage] = useState(getInitialLanguage());
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { t } = useTranslation();
-
-  function getInitialLanguage() {
-    const languageCookie = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('locale='));
-
-    if (languageCookie) {
-      const [, value] = languageCookie.split('=');
-      return value;
-    }
-
-    return 'fr';
-  }
+  const { t, i18n } = useTranslation();
+  const [language, setLanguage] = useState(i18n.language);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -166,20 +146,7 @@ const Navbar = () => {
 
   const handleLanguageChange = (event) => {
     const newLanguage = event.target.value;
-
-    fetch('/change_locale', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': document.querySelector('[name=csrf-token]').content
-      },
-      body: JSON.stringify({ locale: newLanguage })
-    }).then(response => {
-      if (response.ok) {
-        window.location.reload();
-      }
-    });
-
+    i18n.changeLanguage(newLanguage);
     setLanguage(newLanguage);
   };
 
@@ -195,9 +162,9 @@ const Navbar = () => {
 
   return (
     <NavbarContainer>
-      <LogoLink href="/">
+      <StyledLink to="/">
         <Logo src="images/home-logo.svg" alt="Logo" />
-      </LogoLink>
+      </StyledLink>
       <BurgerMenuIcon onClick={toggleMenu}>
         <svg width="30" height="30" viewBox="0 0 100 100">
           <path d="M10,30h80v10H10z"/>
@@ -216,11 +183,11 @@ const Navbar = () => {
           </LanguageSelect>
         </ChangeLocales>
         <NavLinks>
-          <NavLink href="/">{t('navbar.home')}</NavLink>
-          <NavLink href="/properties">{t('navbar.properties')}</NavLink>
-          <NavLink href="#">{t('navbar.guides')}</NavLink>
-          <NavLink href="#">{t('navbar.faq')}</NavLink>
-          <NavLink href="#">{t('navbar.contact')}</NavLink>
+          <StyledLink to="/">{t('navbar.home')}</StyledLink>
+          <StyledLink to="/properties">{t('navbar.properties')}</StyledLink>
+          <StyledLink to="#">{t('navbar.guides')}</StyledLink>
+          <StyledLink to="#">{t('navbar.faq')}</StyledLink>
+          <StyledLink to="#">{t('navbar.contact')}</StyledLink>
         </NavLinks>
       </MobileNavRightItems>
     </NavbarContainer>
