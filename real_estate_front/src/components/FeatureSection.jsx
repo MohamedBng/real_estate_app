@@ -109,13 +109,10 @@ const FeatureSection = () => {
 
   const propertiesToShow = afficherVentes ? ventes : afficherLocations ? locations : [];
 
-  console.log('API Base URL:', process.env.REACT_APP_API_BASE_URL);
-
   useEffect(() => {
     fetch(`${apiUrl}/api/v1/properties?status=vente&limit=3`)
       .then(response => response.json())
       .then(data => {
-        console.log('Propriétés en vente:', data);
         const troisPremieresVentes = data.properties.slice(0, 3);
         setVentes(troisPremieresVentes);
       })
@@ -126,7 +123,6 @@ const FeatureSection = () => {
     fetch(`${apiUrl}/api/v1/properties?status=location&limit=3`)
       .then(response => response.json())
       .then(data => {
-        console.log('Propriétés en location:', data);
         const troisPremieresLocations = data.properties.slice(0, 3);
         setLocations(troisPremieresLocations);
       })

@@ -144,22 +144,9 @@ const MobileNavRightItems = styled(NavRightItems)`
 
 
 const Navbar = () => {
-  const [language, setLanguage] = useState(getInitialLanguage());
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { t } = useTranslation();
-
-  function getInitialLanguage() {
-    const languageCookie = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('locale='));
-
-    if (languageCookie) {
-      const [, value] = languageCookie.split('=');
-      return value;
-    }
-
-    return 'fr';
-  }
+  const { t, i18n } = useTranslation();
+  const [language, setLanguage] = useState(i18n.language);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -167,20 +154,7 @@ const Navbar = () => {
 
   const handleLanguageChange = (event) => {
     const newLanguage = event.target.value;
-
-    fetch('/change_locale', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': document.querySelector('[name=csrf-token]').content
-      },
-      body: JSON.stringify({ locale: newLanguage })
-    }).then(response => {
-      if (response.ok) {
-        window.location.reload();
-      }
-    });
-
+    i18n.changeLanguage(newLanguage);
     setLanguage(newLanguage);
   };
 
