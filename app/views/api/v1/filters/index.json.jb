@@ -1,0 +1,5 @@
+{
+  cities: render(partial: "api/v1/cities/city", collection: @cities, as: :city),
+  property_statuses: render(partial: "api/v1/filters/property_status", collection: @property_statuses, as: :status),
+  property_types: render(partial: "api/v1/filters/property_type", collection: @property_types, as: :type)
+}

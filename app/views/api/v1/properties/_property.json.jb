@@ -8,8 +8,8 @@
   bedrooms: property.bedrooms,
   bathrooms: property.bathrooms,
   area: property.area,
-  property_type: property.property_type,
-  status: property.status,
+  property_type: property.property_type.humanize,
+  status: property.status.humanize,
   photos: property.property_photos.map do |photo|
     {
       url: photo.file_url,

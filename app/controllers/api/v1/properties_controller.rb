@@ -3,10 +3,6 @@ class Api::V1::PropertiesController < Api::V1::BaseController
     @properties = Property.all
 
     apply_filters
-
-    # @status_enum = Property.statuses.keys
-    # @property_type_enum = Property.property_types.keys
-    # @cities = Property.cities.keys
   end
 
   def show
@@ -17,9 +13,19 @@ class Api::V1::PropertiesController < Api::V1::BaseController
 
   def apply_filters
     filter_params.each do |key, value|
-      @properties = @properties.where(key => value) if value.present?
+      if value.present?
+        if key == 'property_type' || key == 'status'
+          enum_value = Property.property_types[value.parameterize.underscore]
+          @properties = @properties.where(property_type: enum_value) if enum_value
+        elsif key == 'city'
+          @properties = @properties.where("address->>'city' = ?", value)
+        else
+          @properties = @properties.where(key => value)
+        end
+      end
     end
   end
+
 
   def filter_params
     params.permit(:city, :property_type, :status, :bedrooms, :bathrooms)
