@@ -24,8 +24,6 @@ class Api::V1::PropertiesController < Api::V1::BaseController
         enum_value = value.split(' ').map(&:capitalize).join('_')
         @properties = @properties.where("address->>'city' = ?", enum_value)
       when 'page'
-        p key
-        p value
         @properties = @properties.page(value).per(8)
       else
         @properties = @properties.where(key => value)

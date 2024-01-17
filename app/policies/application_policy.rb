@@ -43,7 +43,6 @@ class ApplicationPolicy
     end
 
     def resolve
-      # Implémentation minimale pour renvoyer toutes les ressources non restreintes
       scope.all
     end
 

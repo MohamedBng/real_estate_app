@@ -17,7 +17,6 @@ class Property < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    # Liste des attributs autorisés
     ['city', 'property_type', 'status', 'title']
   end
 

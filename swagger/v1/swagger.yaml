@@ -12,6 +12,14 @@ paths:
       responses:
         '200':
           description: success
+  "/api/v1/filters":
+    get:
+      summary: Get property filters
+      tags:
+      - Filters
+      responses:
+        '200':
+          description: success
   "/api/v1/properties":
     get:
       summary: Get the list of properties
