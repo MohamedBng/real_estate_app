@@ -55,10 +55,9 @@ const ResetFiltersButton = styled.a`
   font-size: small;
 `;
 
-const PropertySearchForm = () => {
+const PropertySearchForm = ({ onSearch }) => {
   const navigate = useNavigate();
   const { register, handleSubmit, reset } = useForm();
-  const { search } = useLocation();
 
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
   const [cities, setCities] = useState([]);
@@ -76,28 +75,18 @@ const PropertySearchForm = () => {
       .catch(error => console.error('Erreur lors de la récupération des filtres:', error));
   }, []);
 
-  useEffect(() => {
-    const query = new URLSearchParams(search);
-    const city = query.get('city') || "";
-    const propertyType = query.get('property_type') || "";
-    const status = query.get('status') || "";
-    const bathrooms = query.get('bathrooms') || "";
-    const bedrooms = query.get('bedrooms') || "";
+  const onSubmit = data => {
+    const searchParams = new URLSearchParams(data).toString();
+    navigate(`/properties?${searchParams}`);
 
-    const apiUrlWithParams = `${apiUrl}/api/v1/properties?city=${city}&property_type=${propertyType}&status=${status}&bathrooms=${bathrooms}&bedrooms=${bedrooms}`;
-    console.log('apiUrlWithParams', apiUrlWithParams);
+    const apiUrlWithParams = `${apiUrl}/api/v1/properties?${searchParams}`;
     fetch(apiUrlWithParams)
       .then(response => response.json())
       .then(data => {
-        console.log('Résultats de la recherche API:', data);
+        console.log(data);
+        onSearch(data.properties);
       })
       .catch(error => console.error('Erreur lors de la recherche API:', error));
-  }, [search]);
-
-  const onSubmit = data => {
-    const searchParams = new URLSearchParams(data).toString();
-    console.log(searchParams);
-    navigate(`/properties?${searchParams}`);
   };
 
   return (

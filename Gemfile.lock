@@ -400,6 +400,7 @@ DEPENDENCIES
   importmap-rails
   jb
   jbuilder
+  kaminari
   letter_opener
   mini_magick
   pg (~> 1.1)

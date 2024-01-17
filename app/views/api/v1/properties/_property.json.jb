@@ -3,7 +3,7 @@
   title: property.title,
   description: property.description,
   price: property.price,
-  city: property.address["city"],
+  city: property.address["city"].humanize,
   street: property.address["street"],
   bedrooms: property.bedrooms,
   bathrooms: property.bathrooms,

@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   # root "articles#index"
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
-      resources :properties, only: %i[index show]
+      resources :properties, only: %i[index show], defaults: { page: 1 }
       resources :cities, only: :index
       resources :filters, only: :index
     end
