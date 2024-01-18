@@ -152,7 +152,7 @@ const FeatureSection = () => {
                     </CheckboxLabel>
                 </CheckboxContainer>
                 <LinkContainer>
-                  <StyledLink to="/properties">{t('feature_section.see_more')}</StyledLink>
+                  <StyledLink to={`/properties/?status=${afficherVentes ? 'vente' : 'location'}`}>{t('feature_section.see_more')}</StyledLink>
                   <Icon src="/images/arrow-icon-simple.svg" alt="Icon" />
                 </LinkContainer>
             </CheckboxAndLink>

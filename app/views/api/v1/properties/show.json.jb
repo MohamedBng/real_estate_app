@@ -10,5 +10,11 @@
     area: @property.area,
     property_type: @property.property_type,
     status: @property.status,
+    photos: @property.property_photos.map do |photo|
+    {
+      url: photo.file_url,
+      id: photo.id
+    }
+  end
   }
 }
