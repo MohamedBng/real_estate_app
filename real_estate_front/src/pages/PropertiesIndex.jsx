@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropertySearchForm from '../components/PropertySearchForm';
 import PropertyCards from '../components/PropertyCards';
+import Pagination from '../components/Pagination'; // Assurez-vous de créer ce composant
 
 const PropertiesIndex = () => {
   const [properties, setProperties] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [propertiesPerPage] = useState(8);
   const { search } = useLocation();
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -27,14 +30,26 @@ const PropertiesIndex = () => {
     fetchProperties();
   }, [apiUrl, search]);
 
-  const updateProperties = (newProperties) => {
-    setProperties(newProperties);
-  };
+  const lastPropertyIndex = currentPage * propertiesPerPage;
+  const firstPropertyIndex = lastPropertyIndex - propertiesPerPage;
+  const currentProperties = properties.slice(firstPropertyIndex, lastPropertyIndex);
+
+  console.log(properties);
+  console.log(currentProperties);
+  console.log(lastPropertyIndex);
+  console.log(firstPropertyIndex);
+
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
     <div>
-      <PropertySearchForm onSearch={updateProperties} />
-      <PropertyCards properties={properties} />
+      <PropertySearchForm onSearch={setProperties} />
+      <PropertyCards properties={currentProperties} />
+      <Pagination
+        propertiesPerPage={propertiesPerPage}
+        totalProperties={properties.length}
+        paginate={paginate}
+      />
     </div>
   );
 };
