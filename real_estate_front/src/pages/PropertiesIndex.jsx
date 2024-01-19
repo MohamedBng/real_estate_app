@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropertySearchForm from '../components/PropertySearchForm';
 import PropertyCards from '../components/PropertyCards';
-import Pagination from '../components/Pagination'; // Assurez-vous de créer ce composant
+import Pagination from '../components/Pagination';
 
 const PropertiesIndex = () => {
   const [properties, setProperties] = useState([]);
