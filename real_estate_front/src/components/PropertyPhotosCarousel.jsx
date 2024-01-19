@@ -61,7 +61,6 @@ const PropertyPhotosCarousel = ({ propertyPhotos }) => {
       </ImageContainer>
       <ThumbnailsContainer>
         {propertyPhotos.map(photo => (
-          console.log(photo),
           <ThumbnailContainer key={photo.id}>
             <Thumbnail
               src={photo.file}

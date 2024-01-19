@@ -41,3 +41,14 @@
   background-size: cover;
   background-position: center;
 }
+#property-details-body {
+  display: flex;
+  margin-left: 3.6rem;
+  margin-top: 3rem;
+  margin-bottom: 5rem;
+
+  @media (max-width: 767px) {
+      flex-direction: column;
+      margin-left: 0rem;
+  };
+}

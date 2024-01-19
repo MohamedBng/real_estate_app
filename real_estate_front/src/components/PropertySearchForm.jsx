@@ -83,7 +83,6 @@ const PropertySearchForm = ({ onSearch }) => {
     fetch(apiUrlWithParams)
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         onSearch(data.properties);
       })
       .catch(error => console.error('Erreur lors de la recherche API:', error));
