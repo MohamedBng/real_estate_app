@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import Select from 'react-select';
 import styled from 'styled-components';
 
 const PropertySearchRoot = styled.div`
@@ -10,13 +11,6 @@ const PropertySearchRoot = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-bottom: 1rem;
   text-align: center;
-`;
-
-const SearchInput = styled.select`
-  padding: 0.5rem;
-  margin: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 `;
 
 const SearchSelect = styled.select`
@@ -55,9 +49,34 @@ const ResetFiltersButton = styled.a`
   font-size: small;
 `;
 
+const Form = styled.form`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+
+const customStyles = {
+  container: (provided) => ({
+    ...provided,
+    width: '20rem',
+    padding: 0,
+    margin: '0.5rem',
+  }),
+  control: (provided) => ({
+    ...provided,
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+  }),
+  option: (provided) => ({
+    ...provided,
+    color: 'black',
+    padding: 20,
+  }),
+};
+
 const PropertySearchForm = ({ onSearch }) => {
   const navigate = useNavigate();
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, control, reset } = useForm();
 
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
   const [cities, setCities] = useState([]);
@@ -88,27 +107,61 @@ const PropertySearchForm = ({ onSearch }) => {
       .catch(error => console.error('Erreur lors de la recherche API:', error));
   };
 
+  const cityOptions = cities.map(city => ({ value: city.name, label: city.name }));
+  const propertyTypeOptions = propertyTypes.map(type => ({ value: type.title, label: type.title }));
+  const statusOptions = statuses.map(status => ({ value: status.title, label: status.title }));
+
   return (
     <PropertySearchRoot>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <SearchInput name="city" {...register('city')} defaultValue="">
-          <option value="">Sélectionnez une ville</option>
-          {cities.map((city, index) => (
-            <option key={index} value={city.name}>{city.name}</option>
-          ))}
-        </SearchInput>
-        <SearchSelect name="property_type" {...register('property_type')} defaultValue="">
-          <option value="">Sélectionnez un type de propriété</option>
-          {propertyTypes.map((type, index) => (
-            <option key={index} value={type.title}>{type.title}</option>
-          ))}
-        </SearchSelect>
-        <SearchSelect name="status" {...register('status')} defaultValue="">
-          <option value="">Sélectionnez un statut</option>
-          {statuses.map((status, index) => (
-            <option key={index} value={status.title}>{status.title}</option>
-          ))}
-        </SearchSelect>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Controller
+          name="city"
+          control={control}
+          render={({ field: { onChange, onBlur, value, ref } }) => (
+            <Select
+              inputRef={ref}
+              onBlur={onBlur}
+              options={cityOptions}
+              styles={customStyles}
+              classNamePrefix="react-select"
+              placeholder="Sélectionnez une ville"
+              onChange={(val) => onChange(val ? val.value : '')}
+              value={cityOptions.find(option => option.value === value)}
+            />
+          )}
+        />
+        <Controller
+          name="property_type"
+          control={control}
+          render={({ field: { onChange, onBlur, value, ref } }) => (
+            <Select
+              inputRef={ref}
+              onBlur={onBlur}
+              options={propertyTypeOptions}
+              styles={customStyles}
+              classNamePrefix="react-select"
+              placeholder="Sélectionnez un type de propriété"
+              onChange={(val) => onChange(val ? val.value : '')}
+              value={cityOptions.find(option => option.value === value)}
+            />
+          )}
+        />
+        <Controller
+          name="status"
+          control={control}
+          render={({ field: { onChange, onBlur, value, ref } }) => (
+            <Select
+              inputRef={ref}
+              onBlur={onBlur}
+              options={statusOptions}
+              styles={customStyles}
+              classNamePrefix="react-select"
+              placeholder="Sélectionnez un statut"
+              onChange={(val) => onChange(val ? val.value : '')}
+              value={cityOptions.find(option => option.value === value)}
+            />
+          )}
+        />
         <SearchInputNumber
           type="number"
           name="bathrooms"
@@ -125,7 +178,7 @@ const PropertySearchForm = ({ onSearch }) => {
         <ResetFiltersButton href="/properties" onClick={() => reset()}>
           Supprimer les filtres
         </ResetFiltersButton>
-      </form>
+      </Form>
     </PropertySearchRoot>
   );
 };

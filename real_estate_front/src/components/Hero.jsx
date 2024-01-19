@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Select from 'react-select';
 import styled from 'styled-components';
 import '../i18n.js';
 import { useTranslation } from 'react-i18next';
@@ -80,17 +81,28 @@ const LocalisationIcon = styled.img`
   margin-left: 1rem;
 `;
 
-const SearchInput = styled.select`
-  flex: 1;
-  padding: 1.5rem;
-  padding-left: 1.5rem;
-  padding-left: 2.5rem;
-  border: 1px solid #ccc;
-  background-color: white;
-  font-style: italic;
-  border-radius: 10px;
-  -webkit-appearance: none;
-`;
+const customStyles = {
+  container: (provided) => ({
+    ...provided,
+    width: '100%',
+  }),
+  control: (provided) => ({
+    ...provided,
+    border: '1px solid #ccc',
+    borderRadius: '10px',
+    padding: '0.8rem',
+    paddingLeft: '2.5rem',
+    paddingRight: '1.5rem',
+    backgroundColor: 'white',
+  }),
+  option: (provided) => ({
+    ...provided,
+    color: 'black',
+    padding: 20,
+  }),
+};
+
+
 
 const SearchButton = styled.button`
   background-color: #3E8BE4;
@@ -101,6 +113,7 @@ const SearchButton = styled.button`
   border-radius: 5px;
   width: 6.8rem;
   cursor: pointer;
+  z-index: 2;
 
   &:hover {
     background-color: #0069d9;
@@ -154,6 +167,8 @@ const Hero = () => {
       .catch(error => console.error('Erreur lors de la récupération des villes:', error));
   }, []);
 
+  const options = cities.map(city => ({ value: city.name, label: city.name }));
+
   return (
     <HeroContainer>
       <HeroCorp>
@@ -161,11 +176,14 @@ const Hero = () => {
         <Subtitle>{t('hero.subtitle')}</Subtitle>
         <SearchBar as="form" action="/properties" method="get">
           <LocalisationIcon src="/images/localisation-icon.svg" alt={t('hero.localisation_icon_alt')} />
-          <SearchInput as="select" name="city">
-            {cities.map((city, index) => (
-              <option key={index} value={city.name}>{city.name}</option>
-            ))}
-          </SearchInput>
+          <Select
+            options={options}
+            styles={customStyles}
+            name="city"
+            className="react-select-container"
+            classNamePrefix="react-select"
+            placeholder={t('hero.search_placeholder')}
+          />
           <SearchButton type="submit">{t('hero.search_button')}</SearchButton>
         </SearchBar>
         <IconsContainer>
