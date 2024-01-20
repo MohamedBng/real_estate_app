@@ -23,8 +23,6 @@ class Api::V1::PropertiesController < Api::V1::BaseController
       when 'city'
         enum_value = value.split(' ').map(&:capitalize).join('_')
         @properties = @properties.where("address->>'city' = ?", enum_value)
-      when 'page'
-        @properties = @properties.page(value).per(8)
       else
         @properties = @properties.where(key => value)
       end
@@ -32,6 +30,6 @@ class Api::V1::PropertiesController < Api::V1::BaseController
   end
 
   def filter_params
-    params.permit(:city, :property_type, :status, :bedrooms, :bathrooms, :page)
+    params.permit(:city, :property_type, :status, :bedrooms, :bathrooms)
   end
 end

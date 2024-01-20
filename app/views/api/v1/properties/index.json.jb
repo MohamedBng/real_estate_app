@@ -1,5 +1,3 @@
 {
   properties: render(partial: "api/v1/properties/property", collection: @properties, as: :property),
-  total_pages: @properties.total_pages,
-  total_count: @properties.total_count
 }
