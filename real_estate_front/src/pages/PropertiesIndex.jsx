@@ -30,21 +30,23 @@ const PropertiesIndex = () => {
     fetchProperties();
   }, [apiUrl, search]);
 
+  useEffect(() => {
+    const totalAvailablePages = Math.ceil(properties.length / propertiesPerPage);
+    if (currentPage > totalAvailablePages) {
+      setCurrentPage(1);
+    }
+  }, [properties.length, currentPage, propertiesPerPage]);
+
+  const paginate = pageNumber => setCurrentPage(pageNumber);
   const lastPropertyIndex = currentPage * propertiesPerPage;
   const firstPropertyIndex = lastPropertyIndex - propertiesPerPage;
   const currentProperties = properties.slice(firstPropertyIndex, lastPropertyIndex);
-
-  console.log(properties);
-  console.log(currentProperties);
-  console.log(lastPropertyIndex);
-  console.log(firstPropertyIndex);
-
-  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
     <div>
       <PropertySearchForm onSearch={setProperties} />
       <PropertyCards properties={currentProperties} />
+
       <Pagination
         propertiesPerPage={propertiesPerPage}
         totalProperties={properties.length}
