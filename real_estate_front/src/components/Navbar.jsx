@@ -153,17 +153,17 @@ const Navbar = () => {
   const getFlagImagePath = () => {
     switch (language) {
       case 'en':
-        return "images/english-flag.svg";
+        return `${process.env.REACT_APP_BASE_URL}/images/english-flag.svg`;
       case 'fr':
       default:
-        return "images/french-flag.svg";
+        return `${process.env.REACT_APP_BASE_URL}/images/french-flag.svg`;
     }
   };
 
   return (
     <NavbarContainer>
       <StyledLink to="/">
-        <Logo src="images/home-logo.svg" alt="Logo" />
+        <Logo src={`${process.env.REACT_APP_BASE_URL}/images/home-logo.svg`} alt="Logo" />
       </StyledLink>
       <BurgerMenuIcon onClick={toggleMenu}>
         <svg width="30" height="30" viewBox="0 0 100 100">
