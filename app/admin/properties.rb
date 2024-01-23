@@ -6,7 +6,6 @@ ActiveAdmin.register Property do
   filter :title
   filter :status, as: :select, collection: Property.statuses.keys
   filter :property_type, as: :select, collection: Property.property_types.keys
-  filter :city, as: :select, collection: Property.cities.keys
 
   index do
     selectable_column
@@ -15,10 +14,10 @@ ActiveAdmin.register Property do
       property.title[I18n.locale.to_s]
     end
     column :street do |property|
-      property.address['street']
+      property.address&.street
     end
     column :city do |property|
-      property.address['city'].humanize
+      property.address&.city
     end
     column :status do |property|
       property.status.humanize
@@ -44,10 +43,10 @@ ActiveAdmin.register Property do
         property.description['en']
       end
       row :street do |property|
-        property.address['street']
+        property.address&.street
       end
       row :city do |property|
-        property.address['city']
+        property.address&.city
       end
       row :status
       row :property_type
@@ -75,14 +74,14 @@ ActiveAdmin.register Property do
       f.input :title_en, label: 'Titre (Anglais)', as: :text, input_html: { name: "property[title_en]", value: f.object.title&.[]('en') }
       f.input :description_fr, label: 'Description (Français)', as: :text , input_html: { value: f.object.description&.[]('fr') }
       f.input :description_en, label: 'Description (Anglais)', as: :text , input_html: { value: f.object.description&.[]('en') }
-      f.input :street, label: 'Rue', input_html: { value: f.object.address&.[]('street') }
-      f.input :city, as: :select, collection: Property.cities.keys, selected: f.object.address&.[]('city')
       f.input :price
       f.input :bedrooms
       f.input :bathrooms
       f.input :area
       f.input :property_type, as: :select, collection: Property.property_types.keys
       f.input :status, as: :select, collection: Property.statuses.keys
+      f.input :street, input_html: { value: f.object.address&.street }
+      f.input :city, input_html: { value: f.object.address&.city }
     end
 
     f.inputs 'Photos' do
@@ -114,20 +113,18 @@ ActiveAdmin.register Property do
 
   permit_params :price, :bedrooms, :bathrooms, :area, :property_type, :status,
   :title_fr, :title_en, :description_fr, :description_en,
-  :street, :city, :country, property_photos_attributes: [:id, :file, :position, :_destroy]
+  :street, :city, :country, property_photos_attributes: [:id, :file, :position, :_destroy], address_attributes: [:street, :city]
 
   controller do
     def create
-      @property = Property.new(permitted_params.except(:title_fr, :title_en, :description_fr, :description_en, :street, :city, :country))
+      Rails.logger.debug "Params reçus dans create: #{permitted_params.to_h}"
+      @property = Property.new(permitted_params.except(:title_fr, :title_en, :description_fr, :description_en))
       set_custom_fields(@property, permitted_params)
       super
     end
 
     def edit
       @property = Property.find(params[:id])
-
-
-      # Définissez le titre en fonction de la langue de l'application et des données de l'enregistrement
       @page_title = I18n.locale == :fr ? @property.title['fr'] : @property.title['en']
       render 'active_admin/resource/edit'
     end
@@ -148,11 +145,6 @@ ActiveAdmin.register Property do
       property.description = {
       'fr' => params[:description_fr],
       'en' => params[:description_en]
-      }
-      property.address = {
-      'street' => params[:street],
-      'city' => params[:city],
-      'country' => params[:country]
       }
     end
   end

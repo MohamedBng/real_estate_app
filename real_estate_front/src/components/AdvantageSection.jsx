@@ -5,12 +5,11 @@ const AdvantageSectionContainer = styled.section`
     display: flex;
     justify-content: space-between;
     padding: 2rem;
-    margin-top: 15rem;
-    margin-bottom: 15rem;
     width: 90%;
     max-width: 111rem;
     margin: 0 auto;
     margin-top: 10rem;
+    margin-bottom: 10rem;
 
     @media (max-width: 767px) {
       margin-top: 0rem;

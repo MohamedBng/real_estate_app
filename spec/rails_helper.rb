@@ -70,3 +70,4 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+Geocoder.configure(lookup: :test, ip_lookup: :test)
