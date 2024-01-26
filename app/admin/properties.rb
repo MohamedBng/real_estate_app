@@ -80,13 +80,20 @@ ActiveAdmin.register Property do
       f.input :area
       f.input :property_type, as: :select, collection: Property.property_types.keys
       f.input :status, as: :select, collection: Property.statuses.keys
-      f.input :street, input_html: { value: f.object.address&.street }
-      f.input :city, input_html: { value: f.object.address&.city }
+    end
+
+    f.inputs 'Address', for: [:address, f.object.address || Address.new] do |a|
+      a.input :street
+      a.input :city
     end
 
     f.inputs 'Photos' do
       f.has_many :property_photos, allow_destroy: true, new_record: true, heading: 'Photos', sortable: :position, sortable_start: 1 do |photo|
-        photo.input :file, as: :file, hint: photo.object.file.present? ? image_tag(photo.object.file_url(:small)) : content_tag(:span, 'Aucune photo pour le moment')
+        if photo.object.persisted?
+          photo.input :file, as: :file, hint: photo.object.file.present? ? image_tag(photo.object.file_url(:small)) : content_tag(:span, 'Aucune photo pour le moment')
+        else
+          photo.input :file, as: :file
+        end
         photo.input :position, as: :hidden
       end
     end
@@ -113,12 +120,11 @@ ActiveAdmin.register Property do
 
   permit_params :price, :bedrooms, :bathrooms, :area, :property_type, :status,
   :title_fr, :title_en, :description_fr, :description_en,
-  :street, :city, :country, property_photos_attributes: [:id, :file, :position, :_destroy], address_attributes: [:street, :city]
+  :street, :city, :country, property_photos_attributes: [:id, :file, :position, :_destroy], address_attributes: [:id, :street, :city, :_destroy]
 
   controller do
     def create
-      Rails.logger.debug "Params reçus dans create: #{permitted_params.to_h}"
-      @property = Property.new(permitted_params.except(:title_fr, :title_en, :description_fr, :description_en))
+      @property = Property.new(permitted_params[:property].except(:title_fr, :title_en, :description_fr, :description_en))
       set_custom_fields(@property, permitted_params)
       super
     end

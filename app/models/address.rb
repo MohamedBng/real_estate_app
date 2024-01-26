@@ -1,10 +1,9 @@
 class Address < ApplicationRecord
   geocoded_by :address
   after_validation :geocode
+  after_validation :geocode_success
 
   belongs_to :property
-
-  validate :geocode_success
 
   def address
     [street, city].compact.join(', ')
