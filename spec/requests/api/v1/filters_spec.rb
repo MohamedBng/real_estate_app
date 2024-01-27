@@ -3,6 +3,8 @@ require 'swagger_helper'
 
 RSpec.describe 'Api::V1::Filters', type: :request do
   let(:json) { JSON.parse(response.body) }
+  let!(:properties) { create_list(:property, 2) }
+  let(:cities) { properties.map { |property| property.address.city }.uniq }
 
   path '/api/v1/filters' do
     get('Get property filters') do
@@ -24,7 +26,7 @@ RSpec.describe 'Api::V1::Filters', type: :request do
 
         it 'returns cities' do
           returned_cities = json['cities'].map { |city| city['name'] }
-          expect(returned_cities).to match_array(Property.cities.keys.map(&:humanize))
+          expect(returned_cities).to match_array(cities)
         end
       end
     end

@@ -113,7 +113,7 @@ const PropertyDetailsCard = ({ property }) => {
         <CardBody>
             <CardHeader>
                 <Name>{property.title["en"]}</Name>
-                <Adress>{`${property.address["street"]}, ${property.address["city"]}`}</Adress>
+                <Adress>{`${property.address}`}</Adress>
             </CardHeader>
             <Price>$ {property.price}</Price>
             <Options>

@@ -35,6 +35,7 @@ RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.include FactoryBot::Syntax::Methods
+  config.include Devise::Test::ControllerHelpers, type: :controller
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -63,6 +64,23 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+  config.before(:suite) do
+    Geocoder.configure(lookup: :test)
+
+    Geocoder::Lookup::Test.add_stub(
+      "Rue de Rivoli, Paris", [
+        {
+          'coordinates'  => [48.8566, 2.3522],
+          'address'      => 'Rue de Rivoli, Paris, France',
+          'city'         => 'Paris',
+          'country'      => 'France',
+          'country_code' => 'FR'
+        }
+      ]
+    )
+
+    Geocoder::Lookup::Test.add_stub("Adresse incorrecte, Paris", [])
+  end
 end
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
@@ -70,3 +88,4 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+Geocoder.configure(lookup: :test, ip_lookup: :test)

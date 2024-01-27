@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_14_133659) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_23_070249) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,6 +26,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_14_133659) do
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author"
     t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource"
+  end
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "street"
+    t.string "city"
+    t.jsonb "latlon"
+    t.bigint "property_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["property_id"], name: "index_addresses_on_property_id"
   end
 
   create_table "admin_users", force: :cascade do |t|
@@ -46,7 +56,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_14_133659) do
     t.jsonb "title", null: false
     t.jsonb "description", null: false
     t.decimal "price", null: false
-    t.jsonb "address", null: false
     t.integer "bedrooms", null: false
     t.integer "bathrooms", null: false
     t.decimal "area", null: false
@@ -65,4 +74,5 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_14_133659) do
     t.index ["property_id"], name: "index_property_photos_on_property_id"
   end
 
+  add_foreign_key "addresses", "properties"
 end

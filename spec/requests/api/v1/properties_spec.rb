@@ -18,7 +18,7 @@ RSpec.describe 'Api::V1::Properties', type: :request do
         end
 
         it 'returns a property city' do |example|
-          expect(json['properties'][0]['city']).to eq(property.address["city"].humanize)
+          expect(json['properties'][0]['city']).to eq(property.address.city)
         end
 
         it 'returns a property type' do |example|
@@ -67,7 +67,7 @@ RSpec.describe 'Api::V1::Properties', type: :request do
         end
 
         it 'returns the correct address' do |example|
-          expect(json["property"]['address']).to eq(property.address)
+          expect(json["property"]['address']).to eq(property.address.to_s)
         end
 
         it 'returns the correct property bedrooms count' do |example|

@@ -4,7 +4,7 @@
     title: @property.title,
     description: @property.description,
     price: @property.price,
-    address: @property.address,
+    address: @property.address.to_s,
     bedrooms: @property.bedrooms,
     bathrooms: @property.bathrooms,
     area: @property.area,

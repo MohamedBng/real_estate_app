@@ -6,7 +6,6 @@ ActiveAdmin.register Property do
   filter :title
   filter :status, as: :select, collection: Property.statuses.keys
   filter :property_type, as: :select, collection: Property.property_types.keys
-  filter :city, as: :select, collection: Property.cities.keys
 
   index do
     selectable_column
@@ -15,10 +14,10 @@ ActiveAdmin.register Property do
       property.title[I18n.locale.to_s]
     end
     column :street do |property|
-      property.address['street']
+      property.address&.street
     end
     column :city do |property|
-      property.address['city'].humanize
+      property.address&.city
     end
     column :status do |property|
       property.status.humanize
@@ -43,11 +42,8 @@ ActiveAdmin.register Property do
       row :description_en do |property|
         property.description['en']
       end
-      row :street do |property|
-        property.address['street']
-      end
-      row :city do |property|
-        property.address['city']
+      row :address do |property|
+        property.address.to_s
       end
       row :status
       row :property_type
@@ -75,8 +71,6 @@ ActiveAdmin.register Property do
       f.input :title_en, label: 'Titre (Anglais)', as: :text, input_html: { name: "property[title_en]", value: f.object.title&.[]('en') }
       f.input :description_fr, label: 'Description (Français)', as: :text , input_html: { value: f.object.description&.[]('fr') }
       f.input :description_en, label: 'Description (Anglais)', as: :text , input_html: { value: f.object.description&.[]('en') }
-      f.input :street, label: 'Rue', input_html: { value: f.object.address&.[]('street') }
-      f.input :city, as: :select, collection: Property.cities.keys, selected: f.object.address&.[]('city')
       f.input :price
       f.input :bedrooms
       f.input :bathrooms
@@ -85,9 +79,18 @@ ActiveAdmin.register Property do
       f.input :status, as: :select, collection: Property.statuses.keys
     end
 
+    f.inputs 'Address', for: [:address, f.object.address || Address.new] do |a|
+      a.input :street
+      a.input :city
+    end
+
     f.inputs 'Photos' do
       f.has_many :property_photos, allow_destroy: true, new_record: true, heading: 'Photos', sortable: :position, sortable_start: 1 do |photo|
-        photo.input :file, as: :file, hint: photo.object.file.present? ? image_tag(photo.object.file_url(:small)) : content_tag(:span, 'Aucune photo pour le moment')
+        if photo.object.persisted?
+          photo.input :file, as: :file, hint: photo.object.file.present? ? image_tag(photo.object.file_url(:small)) : content_tag(:span, 'Aucune photo pour le moment')
+        else
+          photo.input :file, as: :file
+        end
         photo.input :position, as: :hidden
       end
     end
@@ -114,45 +117,37 @@ ActiveAdmin.register Property do
 
   permit_params :price, :bedrooms, :bathrooms, :area, :property_type, :status,
   :title_fr, :title_en, :description_fr, :description_en,
-  :street, :city, :country, property_photos_attributes: [:id, :file, :position, :_destroy]
+  :street, :city, :country, property_photos_attributes: [:id, :file, :position, :_destroy], address_attributes: [:id, :street, :city, :_destroy]
 
   controller do
     def create
-      @property = Property.new(permitted_params.except(:title_fr, :title_en, :description_fr, :description_en, :street, :city, :country))
-      set_custom_fields(@property, permitted_params)
+      @property = Property.new(permitted_params[:property])
+      set_custom_fields(permitted_params)
       super
     end
 
     def edit
       @property = Property.find(params[:id])
-
-
-      # Définissez le titre en fonction de la langue de l'application et des données de l'enregistrement
       @page_title = I18n.locale == :fr ? @property.title['fr'] : @property.title['en']
       render 'active_admin/resource/edit'
     end
 
     def update
       @property = Property.find(params[:id])
-      set_custom_fields(@property, permitted_params)
+      set_custom_fields(permitted_params)
       super
     end
 
     private
 
-    def set_custom_fields(property, params)
-      property.title = {
-      'fr' => params[:title_fr],
-      'en' => params[:title_en]
+    def set_custom_fields(params)
+      @property.title = {
+      'fr' => params[:property][:title_fr],
+      'en' => params[:property][:title_en]
       }
-      property.description = {
-      'fr' => params[:description_fr],
-      'en' => params[:description_en]
-      }
-      property.address = {
-      'street' => params[:street],
-      'city' => params[:city],
-      'country' => params[:country]
+      @property.description = {
+      'fr' => params[:property][:description_fr],
+      'en' => params[:property][:description_en]
       }
     end
   end
