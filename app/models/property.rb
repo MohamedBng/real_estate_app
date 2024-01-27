@@ -48,12 +48,22 @@ class Property < ApplicationRecord
   private
 
   def title_presence
-    errors.add(:title, 'French title must be present') if title['fr'].blank?
-    errors.add(:title, 'English title must be present') if title['en'].blank?
+    if title.blank? || title['fr'].blank?
+      errors.add(:title, 'French title must be present')
+    end
+
+    if title.blank? || title['en'].blank?
+      errors.add(:title, 'English title must be present')
+    end
   end
 
+
   def description_presence
-    errors.add(:description, 'French description must be present') if description['fr'].blank?
-    errors.add(:description, 'English description must be present') if description['en'].blank?
+    if description.blank? || description['fr'].blank?
+      errors.add(:description, 'French description must be present')
+    end
+    if description.blank? || description['en'].blank?
+      errors.add(:description, 'English description must be present')
+    end
   end
 end
