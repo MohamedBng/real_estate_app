@@ -17,6 +17,10 @@ RSpec.describe Address, type: :model do
     Geocoder::Lookup::Test.add_stub("Adresse incorrecte, Paris", [])
   end
 
+  it { should belong_to(:property) }
+  it { should validate_presence_of(:street) }
+  it { should validate_presence_of(:city) }
+
   it "geocodes the address correctly" do
     address = Address.new(street: "Rue de Rivoli", city: "Paris")
     address.valid?

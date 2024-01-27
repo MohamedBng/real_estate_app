@@ -42,11 +42,8 @@ ActiveAdmin.register Property do
       row :description_en do |property|
         property.description['en']
       end
-      row :street do |property|
-        property.address&.street
-      end
-      row :city do |property|
-        property.address&.city
+      row :address do |property|
+        property.address.to_s
       end
       row :status
       row :property_type

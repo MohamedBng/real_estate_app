@@ -64,6 +64,23 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+  config.before(:suite) do
+    Geocoder.configure(lookup: :test)
+
+    Geocoder::Lookup::Test.add_stub(
+      "Rue de Rivoli, Paris", [
+        {
+          'coordinates'  => [48.8566, 2.3522],
+          'address'      => 'Rue de Rivoli, Paris, France',
+          'city'         => 'Paris',
+          'country'      => 'France',
+          'country_code' => 'FR'
+        }
+      ]
+    )
+
+    Geocoder::Lookup::Test.add_stub("Adresse incorrecte, Paris", [])
+  end
 end
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

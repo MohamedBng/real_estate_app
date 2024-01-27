@@ -1,12 +1,12 @@
 class Api::V1::PropertiesController < Api::V1::BaseController
   def index
-    @properties = Property.all
+    @properties = Property.includes(:address).all
 
     apply_filters
   end
 
   def show
-    @property = Property.find(params[:id])
+    @property = Property.includes(:address).find(params[:id])
   end
 
   private
@@ -21,8 +21,7 @@ class Api::V1::PropertiesController < Api::V1::BaseController
         enum_value = Property.statuses[value.parameterize.underscore] if key == 'status'
         @properties = @properties.where(key => enum_value) if enum_value
       when 'city'
-        enum_value = value.split(' ').map(&:capitalize).join('_')
-        @properties = @properties.where("address->>'city' = ?", enum_value)
+        @properties = @properties.by_city(value)
       else
         @properties = @properties.where(key => value)
       end
