@@ -9,6 +9,9 @@ class Property < ApplicationRecord
 
   validates :title, :description, :price, :bedrooms, :bathrooms, :area, :property_type, :status, presence: true
 
+  validate :title_presence
+  validate :description_presence
+
   scope :ordered_by_most_recent, -> { order(created_at: :desc) }
   scope :by_city, -> (city) {
     joins(:address).where('addresses.city ILIKE ?', "%#{city}%")
@@ -40,5 +43,17 @@ class Property < ApplicationRecord
   def description_en=(value)
     self.description ||= {}
     self.description['en'] = value
+  end
+
+  private
+
+  def title_presence
+    errors.add(:title, 'French title must be present') if title['fr'].blank?
+    errors.add(:title, 'English title must be present') if title['en'].blank?
+  end
+
+  def description_presence
+    errors.add(:description, 'French description must be present') if description['fr'].blank?
+    errors.add(:description, 'English description must be present') if description['en'].blank?
   end
 end

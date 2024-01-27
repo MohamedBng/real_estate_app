@@ -121,8 +121,8 @@ ActiveAdmin.register Property do
 
   controller do
     def create
-      @property = Property.new(permitted_params[:property].except(:title_fr, :title_en, :description_fr, :description_en))
-      set_custom_fields(@property, permitted_params)
+      @property = Property.new(permitted_params[:property])
+      set_custom_fields(permitted_params)
       super
     end
 
@@ -134,20 +134,20 @@ ActiveAdmin.register Property do
 
     def update
       @property = Property.find(params[:id])
-      set_custom_fields(@property, permitted_params)
+      set_custom_fields(permitted_params)
       super
     end
 
     private
 
-    def set_custom_fields(property, params)
-      property.title = {
-      'fr' => params[:title_fr],
-      'en' => params[:title_en]
+    def set_custom_fields(params)
+      @property.title = {
+      'fr' => params[:property][:title_fr],
+      'en' => params[:property][:title_en]
       }
-      property.description = {
-      'fr' => params[:description_fr],
-      'en' => params[:description_en]
+      @property.description = {
+      'fr' => params[:property][:description_fr],
+      'en' => params[:property][:description_en]
       }
     end
   end
