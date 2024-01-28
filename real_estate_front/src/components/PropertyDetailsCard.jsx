@@ -15,7 +15,7 @@ const PropertyDetailsCardContainer = styled.div`
     position: absolute;
     margin-top: 2rem;
 
-    @media (max-width: 767px) {
+    @media (max-width: 1024px) {
         width: 85%;
         position: unset;
         padding: 1rem;
@@ -32,7 +32,7 @@ const CardBody = styled.div`
     padding-bottom: 1rem;
     height: 27rem;
 
-    @media (max-width: 767px) {
+    @media (max-width: 1024px) {
         width: 100%;
     }
 `;
@@ -72,7 +72,7 @@ const OptionsIcons = styled.div`
 const OptionIcon = styled.img`
     width: 2rem;
 
-    @media (max-width: 767px) {
+    @media (max-width: 1024px) {
         width: 1rem;
     }
 `;
