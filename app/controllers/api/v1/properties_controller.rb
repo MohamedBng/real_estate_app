@@ -22,6 +22,10 @@ class Api::V1::PropertiesController < Api::V1::BaseController
         @properties = @properties.where(key => enum_value) if enum_value
       when 'city'
         @properties = @properties.by_city(value)
+      when 'min_price'
+        @properties = @properties.where('price >= ?', value)
+      when 'max_price'
+        @properties = @properties.where('price <= ?', value)
       else
         @properties = @properties.where(key => value)
       end
@@ -29,6 +33,6 @@ class Api::V1::PropertiesController < Api::V1::BaseController
   end
 
   def filter_params
-    params.permit(:city, :property_type, :status, :bedrooms, :bathrooms)
+    params.permit(:city, :property_type, :status, :bedrooms, :bathrooms, :min_price, :max_price)
   end
 end

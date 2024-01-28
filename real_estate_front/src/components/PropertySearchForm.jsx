@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Range } from 'react-range';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
@@ -334,6 +335,55 @@ const customStyles = {
   }),
 };
 
+const RangeInput = styled.input`
+  width: 30%;
+  padding: 8px 12px;
+  margin-top: 0.8rem;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+
+  &:focus {
+    outline: none;
+    border-color: #3e8be4;
+  }
+`;
+
+const StyledThumb = styled.div`
+  height: 20px;
+  width: 20px;
+  background-color: #3e8be4;
+  border-radius: 50%;
+  cursor: pointer;
+`;
+
+const StyledTrack = styled.div`
+  height: 6px;
+  width: 88%;
+  background-color: #ccc;
+  margin: 0 auto;
+`;
+
+const TrackRange = styled.div`
+  height: 6px;
+  background-color: #3e8be4;
+  position: absolute;
+`;
+
+const RangeInputsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  margin: 0 auto;
+`;
+
+const getTrackBackground = (values, min, max) => {
+  const percentMin = ((values[0] - min) / (max - min)) * 100;
+  const percentMax = ((values[1] - min) / (max - min)) * 100;
+  return `linear-gradient(to right, #ccc ${percentMin}%, #3e8be4 ${percentMin}% , #3e8be4 ${percentMax}%, #ccc ${percentMax}%)`;
+};
+
 const PropertySearchForm = ({ onSearch }) => {
   const navigate = useNavigate();
   const { handleSubmit, control, reset} = useForm();
@@ -346,6 +396,7 @@ const PropertySearchForm = ({ onSearch }) => {
   const [selectedBathroom, setSelectedBathroom] = useState([]);
   const [selectedPropertyStatus, setSelectedPropertyStatus] = useState(null);
   const [selectedPropertyType, setSelectedPropertyType] = useState(null);
+  const [priceRange, setPriceRange] = useState([0, 1000000]);
 
   useEffect(() => {
     fetch(`${apiUrl}/api/v1/filters`)
@@ -406,6 +457,22 @@ const PropertySearchForm = ({ onSearch }) => {
     setSelectedPropertyType(propertyType);
   };
 
+  const handleRangeChange = (values) => {
+    setPriceRange(values);
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    const newPriceRange = [...priceRange];
+    if (name === "minPrice") {
+      newPriceRange[0] = Math.min(value, priceRange[1]);
+    } else if (name === "maxPrice") {
+      newPriceRange[1] = Math.max(value, priceRange[0]);
+    }
+    setPriceRange(newPriceRange);
+  };
+
+
   const onSubmit = (data) => {
     const searchParams = new URLSearchParams({
       city: data.city || '',
@@ -413,6 +480,8 @@ const PropertySearchForm = ({ onSearch }) => {
       status: selectedPropertyStatus || '',
       bedrooms: selectedBedroom || '',
       bathrooms: selectedBathroom || '',
+      min_price: priceRange[0],
+      max_price: priceRange[1]
     }).toString();
 
     navigate(`/properties?${searchParams}`);
@@ -435,6 +504,7 @@ const PropertySearchForm = ({ onSearch }) => {
     setSelectedPropertyStatus(null);
     setSelectedPropertyType(null);
     setShowFilterMenu(false);
+    setPriceRange([0, 1000000]);
   };
 
   return (
@@ -500,6 +570,42 @@ const PropertySearchForm = ({ onSearch }) => {
               </SelectionButton>
             ))}
           </SelectionGroup>
+          <Title>Plage de prix</Title>
+          <Range
+            step={1}
+            min={0}
+            max={1000000}
+            values={priceRange}
+            onChange={handleRangeChange}
+            renderTrack={({ props, children }) => (
+              <StyledTrack
+                {...props}
+                style={{
+                  ...props.style,
+                  background: getTrackBackground(priceRange, 0, 1000000),
+                }}
+              >
+                {children}
+              </StyledTrack>
+            )}
+            renderThumb={({ props }) => (
+              <StyledThumb {...props} />
+            )}
+          />
+          <RangeInputsContainer>
+            <RangeInput
+              type="number"
+              name="minPrice"
+              value={priceRange[0]}
+              onChange={handleInputChange}
+            />
+            <RangeInput
+              type="number"
+              name="maxPrice"
+              value={priceRange[1]}
+              onChange={handleInputChange}
+            />
+          </RangeInputsContainer>
           <Title className="property-type-filters" >Type de logement</Title>
           <SelectionGroup>
             {propertyTypes.map((type) => (
