@@ -434,6 +434,7 @@ const PropertySearchForm = ({ onSearch }) => {
     setSelectedBathroom(null);
     setSelectedPropertyStatus(null);
     setSelectedPropertyType(null);
+    setShowFilterMenu(false);
   };
 
   return (
