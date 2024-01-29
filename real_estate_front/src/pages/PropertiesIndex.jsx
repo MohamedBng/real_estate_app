@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import PropertySearchForm from '../components/PropertySearchForm';
 import PropertyCards from '../components/PropertyCards';
 import Pagination from '../components/Pagination';
+import PropertyNotFound from '../components/PropertyNotFound';
 
 const PropertiesIndex = () => {
   const [properties, setProperties] = useState([]);
@@ -45,13 +46,18 @@ const PropertiesIndex = () => {
   return (
     <div>
       <PropertySearchForm onSearch={setProperties} />
-      <PropertyCards properties={currentProperties} />
-
-      <Pagination
-        propertiesPerPage={propertiesPerPage}
-        totalProperties={properties.length}
-        paginate={paginate}
-      />
+      {properties.length > 0 ? (
+        <>
+          <PropertyCards properties={currentProperties} />
+          <Pagination
+            propertiesPerPage={propertiesPerPage}
+            totalProperties={properties.length}
+            paginate={paginate}
+          />
+        </>
+      ) : (
+        <PropertyNotFound />
+      )}
     </div>
   );
 };
