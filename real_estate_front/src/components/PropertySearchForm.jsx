@@ -478,8 +478,8 @@ const PropertySearchForm = ({ onSearch }) => {
       city: data.city || '',
       property_type: data.property_type ||selectedPropertyType || '',
       status: selectedPropertyStatus || '',
-      bedrooms: selectedBedroom || '',
-      bathrooms: selectedBathroom || '',
+      bedrooms: selectedBedroom === "Tout" ? '' : selectedBedroom || '',
+      bathrooms: selectedBathroom === "Tout" ? '' : selectedBathroom || '',
       min_price: priceRange[0],
       max_price: priceRange[1]
     }).toString();
