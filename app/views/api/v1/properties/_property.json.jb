@@ -4,6 +4,7 @@
   description: property.description,
   price: property.price,
   city: property.address.city,
+  latlon: property.address.latlon,
   street: property.address.street,
   bedrooms: property.bedrooms,
   bathrooms: property.bathrooms,

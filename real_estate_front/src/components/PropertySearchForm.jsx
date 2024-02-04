@@ -317,6 +317,7 @@ const customStyles = {
     width: '100%',
     margin: 0,
     flex: 1,
+    zIndex: 3,
   }),
   control: (provided) => ({
     ...provided,
