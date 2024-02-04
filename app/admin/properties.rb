@@ -2,6 +2,7 @@ ActiveAdmin.register Property do
   actions :all
 
   config.per_page = [10, 50, 100]
+  config.sort_order = 'position_asc'
 
   filter :title
   filter :status, as: :select, collection: Property.statuses.keys
@@ -9,6 +10,7 @@ ActiveAdmin.register Property do
 
   index do
     selectable_column
+    column :position
     id_column
     column (I18n.locale == :fr ? :title_fr : :title_en) do |property|
       property.title[I18n.locale.to_s]
@@ -67,6 +69,7 @@ ActiveAdmin.register Property do
   form do |f|
     f.semantic_errors *f.object.errors.attribute_names
     f.inputs do
+      f.input :position
       f.input :title_fr, label: 'Titre (Français)', as: :text, input_html: { name: "property[title_fr]", value: f.object.title&.[]('fr') }
       f.input :title_en, label: 'Titre (Anglais)', as: :text, input_html: { name: "property[title_en]", value: f.object.title&.[]('en') }
       f.input :description_fr, label: 'Description (Français)', as: :text , input_html: { value: f.object.description&.[]('fr') }
@@ -116,7 +119,7 @@ ActiveAdmin.register Property do
   end
 
   permit_params :price, :bedrooms, :bathrooms, :area, :property_type, :status,
-  :title_fr, :title_en, :description_fr, :description_en,
+  :title_fr, :title_en, :description_fr, :description_en, :position,
   :street, :city, :country, property_photos_attributes: [:id, :file, :position, :_destroy], address_attributes: [:id, :street, :city, :_destroy]
 
   controller do

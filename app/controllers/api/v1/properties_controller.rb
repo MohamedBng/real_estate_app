@@ -1,6 +1,6 @@
 class Api::V1::PropertiesController < Api::V1::BaseController
   def index
-    @properties = Property.includes(:address).all
+    @properties = Property.ordered_by_position.includes(:address).all
 
     apply_filters
   end
