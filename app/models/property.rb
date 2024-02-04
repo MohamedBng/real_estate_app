@@ -4,6 +4,8 @@ class Property < ApplicationRecord
   accepts_nested_attributes_for :property_photos, allow_destroy: true
   accepts_nested_attributes_for :address, allow_destroy: true
 
+  acts_as_list
+
   enum status: { vente: 0, location: 1 }
   enum property_type: { maison: 0, appartement: 1, maisons_de_ville: 3, penthouses: 4,  plots: 5}
 
@@ -13,6 +15,7 @@ class Property < ApplicationRecord
   validate :description_presence
 
   scope :ordered_by_most_recent, -> { order(created_at: :desc) }
+  scope :ordered_by_position, -> { order(position: :asc) }
   scope :by_city, -> (city) {
     joins(:address).where('addresses.city ILIKE ?', "%#{city}%")
   }
