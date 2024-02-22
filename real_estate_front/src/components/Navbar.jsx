@@ -20,6 +20,7 @@ const NavbarContainer = styled.div`
     flex-direction: column;
     height: auto;
     align-items: unset;
+    padding-bottom: 0;
   }
 `;
 
@@ -30,7 +31,6 @@ const Logo = styled.img`
 
   @media (max-width: 767px) {
     width: 9rem;
-    margin-top: -2rem;
     margin-left: 0rem;
   }
 `;
@@ -74,13 +74,12 @@ const NavLinks = styled.div`
 `;
 
 const StyledLink = styled(Link)`
-  margin-right: 1.5rem; // 15px
+  margin-right: 1.5rem;
   color: black;
   text-decoration: none;
   font-size: medium;
 
   @media (max-width: 767px) {
-    margin-top: 2rem;
     margin-right: 0rem;
     text-align: center;
   }

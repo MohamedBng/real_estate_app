@@ -16,7 +16,6 @@ const HeroContainer = styled.div`
   min-height: 40rem;
 
   @media (max-width: 767px) {
-    text-align: center;
     padding-left: 2rem;
     padding-right: 2rem;
     height: 85vh;
@@ -48,6 +47,7 @@ const MainText = styled.p`
 
   @media (max-width: 767px) {
     width: 100%;
+    text-align: center;
   }
 `;
 
@@ -55,6 +55,10 @@ const Subtitle = styled.p`
   color: white;
   font-size: 1.5rem;
   font-weight: lighter;
+
+  @media (max-width: 767px) {
+    text-align: center;
+  }
 `;
 
 const SearchBar = styled.div`

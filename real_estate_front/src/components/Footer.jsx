@@ -95,7 +95,6 @@ const Textarea = styled.textarea`
     margin-bottom: 1rem;
     padding: 1.5rem;
     height: 150px;
-    width: 90%;
     background-color: #D9D9D9;
     border: none;
 `;

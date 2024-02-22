@@ -5,11 +5,12 @@ import PropertyCard from './PropertyCard';
 const CardsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 90%;
+  width: 95%;
   max-width: 111rem;
   margin: 0 auto;
   margin-top: 5rem;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 1rem;
 
   @media (min-width: 768px) and (max-width: 1024px) {
       justify-content: center;

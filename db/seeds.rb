@@ -33,4 +33,7 @@ puts "Creating properties... Done!"
 
 puts "Creating admin..."
 
-AdminUser.create!(email: 'admin@example.com', first_name: "Moha", last_name: "Bengrich", password: 'password', password_confirmation: 'password') if Rails.env.development?
+admin = AdminUser.find_or_create_by!(email: 'admin@example.com', first_name: "Moha", last_name: "Bengrich") if Rails.env.development?
+admin.update!(password: 'password', password_confirmation: 'password') if Rails.env.development?
+
+puts "Creating admin... Done!"
